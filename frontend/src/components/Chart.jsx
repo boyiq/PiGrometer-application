@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import {LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { transform } from '../helpers/transform.js'
 import { ticksArr } from '../helpers/timeTicks.js'
 import {tickFormatter_1, tickFormatter_2} from '../helpers/tickFormatters.js'
 import config from '../config.js';
 import axios from 'axios';
 import moment from 'moment';
+import CustomTooltip from './CustomTooltip.jsx';
 
 const Chart = ({history}) => {
   const [rawData, setRawData] = useState([]);
@@ -23,20 +24,6 @@ const Chart = ({history}) => {
   }, [history])
 
   const data = transform(rawData)
-  console.log(data)
-
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${moment(label * 1000).format('ll')}`}</p>
-          <p className="label">{`${moment(label * 1000).format('LT')}`}</p>
-          <p className="label">{`temperature : ${payload[0].value} °C`}</p>
-          <p className="label">{`humidity : ${payload[1].value} %`}</p>
-        </div>
-      );
-    }
-  }
 
   if (firstLoad) {
     return (
@@ -56,14 +43,13 @@ const Chart = ({history}) => {
         bottom: 5
       }}
     >
-      <CartesianGrid strokeDasharray="3 3"/>
       <XAxis 
         dataKey="raw"
         type="number"
         domain={['dataMin', 'dataMax']}
         tickFormatter={history === 1 ? tickFormatter_1 : tickFormatter_2}
         ticks={history === 1 ? ticksArr(data): []}
-        tickCount='5'
+        tickCount={history === 3 ? '4' : '8'}
       />
       <YAxis 
         yAxisId="left"
@@ -87,7 +73,7 @@ const Chart = ({history}) => {
         dot = {false}
         type="monotone"
         dataKey="temperature"
-        stroke="#FF7B54"
+        stroke="#FF7000"
         strokeWidth={2}
         activeDot={{r:8}}
       />
@@ -96,7 +82,7 @@ const Chart = ({history}) => {
         dot = {false}
         type="monotone"
         dataKey="humidity"
-        stroke="#243763"
+        stroke="#540375"
         strokeWidth={2}
         activeDot={{r:8}}
       />
