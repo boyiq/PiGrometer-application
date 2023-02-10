@@ -2,9 +2,26 @@ import React, { useState, useEffect } from 'react';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { transform } from '../helpers/transform.js'
 import { ticksArr } from '../helpers/timeTicks.js'
-import moment from 'moment'
+import {tickFormatter_1, tickFormatter_2} from '../helpers/tickFormatters.js'
+import config from '../config.js';
+import axios from 'axios';
+import moment from 'moment';
 
-const Chart = ({rawData}) => {
+const Chart = ({history}) => {
+  const [rawData, setRawData] = useState([]);
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  useEffect(()=>{
+    axios.get(`http://${config.API}:5000/data?granularity=300&history=${history}`)
+    .then(({data})=>{
+      setRawData(data)
+      setFirstLoad(false)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }, [history])
+
   const data = transform(rawData)
   console.log(data)
 
@@ -19,6 +36,12 @@ const Chart = ({rawData}) => {
         </div>
       );
     }
+  }
+
+  if (firstLoad) {
+    return (
+      <div>Loading</div>
+    );
   }
 
   return (
@@ -38,8 +61,9 @@ const Chart = ({rawData}) => {
         dataKey="raw"
         type="number"
         domain={['dataMin', 'dataMax']}
-        tickFormatter={(tick) => moment(tick * 1000).format('LT')}
-        ticks={ticksArr(data)}
+        tickFormatter={history === 1 ? tickFormatter_1 : tickFormatter_2}
+        ticks={history === 1 ? ticksArr(data): []}
+        tickCount='5'
       />
       <YAxis 
         yAxisId="left"
@@ -60,17 +84,20 @@ const Chart = ({rawData}) => {
       <Legend />
       <Line 
         yAxisId="left"
+        dot = {false}
         type="monotone"
         dataKey="temperature"
         stroke="#FF7B54"
+        strokeWidth={2}
         activeDot={{r:8}}
       />
       <Line 
         yAxisId="right"
-        dot = {true}
+        dot = {false}
         type="monotone"
         dataKey="humidity"
         stroke="#243763"
+        strokeWidth={2}
         activeDot={{r:8}}
       />
     </LineChart>

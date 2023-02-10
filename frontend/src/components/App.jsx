@@ -6,33 +6,11 @@ import Chart from './Chart'
 import HistoryTabs from './HistoryTabs.jsx';
 
 function App() {
-  const [rawData, setRawData] = useState([]);
-  const [firstLoad, setFirstLoad] = useState(true);
-  const [history, setHistory] = useState('')
-
-  useEffect(()=>{
-    axios.get(`http://${config.API}:5000/data`)
-    .then(({data})=>{
-      setRawData(data)
-      setFirstLoad(false)
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-  }, [])
-  if (!firstLoad) {
-    return (
+  return (
       <div className="App">
-        <HistoryTabs history={history}/>
-        <Chart rawData={rawData}/>
+        <HistoryTabs />
       </div>
-    );
-  }
-  else {
-    return (
-      <div>Loading</div>
-    )
-  }
+  )
 }
 
 export default App;
