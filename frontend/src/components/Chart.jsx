@@ -41,8 +41,21 @@ const Chart = ({rawData}) => {
         tickFormatter={(tick) => moment(tick * 1000).format('LT')}
         ticks={ticksArr(data)}
       />
-      <YAxis yAxisId="left"/>
-      <YAxis yAxisId="right" orientation="right" />
+      <YAxis 
+        yAxisId="left"
+        type="number"
+        dataKey="temperature"
+        domain={['auto', 'auto']}
+        allowDataOverflow
+      />
+      <YAxis 
+        yAxisId="right"
+        type="number"
+        dataKey="humidity"
+        domain={['auto', 'auto']}
+        orientation="right" 
+        allowDataOverflow
+      />
       <Tooltip content={<CustomTooltip />}/>
       <Legend />
       <Line 
@@ -53,7 +66,7 @@ const Chart = ({rawData}) => {
         activeDot={{r:8}}
       />
       <Line 
-        yAxisId="left"
+        yAxisId="right"
         dot = {true}
         type="monotone"
         dataKey="humidity"
