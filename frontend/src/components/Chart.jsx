@@ -5,8 +5,9 @@ import { ticksArr } from '../helpers/timeTicks.js'
 import {tickFormatter_1, tickFormatter_2} from '../helpers/tickFormatters.js'
 import config from '../config.js';
 import axios from 'axios';
-import moment from 'moment';
 import CustomTooltip from './CustomTooltip.jsx';
+import {getDomain, getTicks, timeFormatter_2} from '../helpers/timeTest.js';
+import moment from 'moment'
 
 const Chart = ({history}) => {
   const [rawData, setRawData] = useState([]);
@@ -24,6 +25,9 @@ const Chart = ({history}) => {
   }, [history])
 
   const data = transform(rawData)
+  console.log('getticks3', getTicks(3).map((item)=>(moment(item).format('MM-DD'))))
+  console.log('getticks7', getTicks(7))
+  console.log('domain array is ', getDomain(history).domainArr)
 
   if (firstLoad) {
     return (
@@ -46,10 +50,11 @@ const Chart = ({history}) => {
       <XAxis 
         dataKey="raw"
         type="number"
-        domain={['dataMin', 'dataMax']}
+        scale="time"
+        domain={history === 1? ['dataMin', 'dataMax'] : getDomain(history).domainArr}
         tickFormatter={history === 1 ? tickFormatter_1 : tickFormatter_2}
-        ticks={history === 1 ? ticksArr(data): []}
-        tickCount={history === 3 ? '4' : '8'}
+        ticks={history === 1 ? ticksArr(data): getTicks(history)}
+        // tickCount={history === 3 ? '4' : '8'}
       />
       <YAxis 
         yAxisId="left"
