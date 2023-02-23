@@ -34,7 +34,7 @@ code {
   font-family: 'Poppins', sans-serif;
 }
 
-.tabs on:hover {
+.tabs:hover { 
   cursor: pointer;
 }
 

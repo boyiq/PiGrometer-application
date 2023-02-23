@@ -21,11 +21,18 @@ const getDomain = (days) => {
 //const domainToday = getDomain(3).domainFunc
 
 const getTicks = (days) => {
+    let result = {}
     const ticks = getDomain(days).domainFunc.ticks(d3.timeDay.every(1))
     const newTicks = ticks.map((tick)=>{
         return tick.getTime()
     })
-    return ticks;
+    const newDateticks = ticks.map((tick)=>(
+        new Date(tick)
+    ))
+    result.ticks = ticks;
+    result.newTicks = newTicks;
+    result.newDateticks = newDateticks;
+    return result;
 }
 
 const timeFormatter_2 = (tick) => {

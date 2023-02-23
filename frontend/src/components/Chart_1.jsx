@@ -9,12 +9,12 @@ import CustomTooltip from './CustomTooltip.jsx';
 import {getDomain, getTicks, timeFormatter_2} from '../helpers/timeTest.js';
 import moment from 'moment'
 
-const Chart = ({history}) => {
+const Chart_1 = () => {
   const [rawData, setRawData] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true);
 
   useEffect(()=>{
-    axios.get(`http://${config.API}:5000/data?granularity=300&history=${history}`)
+    axios.get(`http://${config.API}:5000/data?granularity=300&history=1`)
     .then(({data})=>{
       setRawData(data)
       setFirstLoad(false)
@@ -22,12 +22,13 @@ const Chart = ({history}) => {
     .catch((err)=>{
       console.log(err)
     })
-  }, [history])
+  }, [])
 
   const data = transform(rawData)
-  console.log('getticks3', getTicks(3).map((item)=>(moment(item).format('MM-DD'))))
-  console.log('getticks7', getTicks(7))
-  console.log('domain array is ', getDomain(history).domainArr)
+  // console.log('getticks3 newtick is', getTicks(3).newTicks)
+  // console.log('getticks3 ticks is', getTicks(3).ticks)
+  // console.log('gettick newdate is ', getTicks(3).newDateticks)
+  // console.log('domain array is ', getDomain(history).domainArr)
 
   if (firstLoad) {
     return (
@@ -51,9 +52,9 @@ const Chart = ({history}) => {
         dataKey="raw"
         type="number"
         scale="time"
-        domain={history === 1? ['dataMin', 'dataMax'] : getDomain(history).domainArr}
-        tickFormatter={history === 1 ? tickFormatter_1 : tickFormatter_2}
-        ticks={history === 1 ? ticksArr(data): getTicks(history)}
+        domain={['dataMin', 'dataMax']}
+        tickFormatter={tickFormatter_1}
+        ticks={ticksArr(data)}
         // tickCount={history === 3 ? '4' : '8'}
       />
       <YAxis 
@@ -95,7 +96,7 @@ const Chart = ({history}) => {
   )
 }
 
-export default Chart
+export default Chart_1
   
 
 

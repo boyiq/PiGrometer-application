@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import Chart from './Chart.jsx';
+import Chart_1 from './Chart_1.jsx';
+import Chart_3 from './Chart_3.jsx';
+import Chart_7 from './Chart_7.jsx';
 
 const HistoryTabs = () => {
     const history1 = 1;
@@ -16,13 +18,13 @@ const HistoryTabs = () => {
             </TabList>
             <TabPanels>
                 <TabPanel>
-                    <Chart history={history1}/>
+                    <Chart_1 />
                 </TabPanel>
                 <TabPanel>
-                    <Chart history={history2} />
+                    <Chart_3 />
                 </TabPanel>
                 <TabPanel>
-                    <Chart history={history3} />
+                    <Chart_7 />
                 </TabPanel>
             </TabPanels>
         </Tabs>
